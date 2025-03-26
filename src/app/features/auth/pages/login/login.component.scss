@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+$primary-color: deeppink;
+$secondary-color: chartreuse;
+$accent-color: #c0a16b;
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(45deg,
+    $secondary-color 25%,
+    $primary-color 25%, $primary-color 50%,
+    $secondary-color 50%,
+    $secondary-color 75%,
+    $primary-color 75%);
+  background-size: 60px 60px;
+  font-family: 'Spectral', serif;
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 380px;
+  text-align: center;
+  border: 3px solid $primary-color;
+  position: relative;
+
+  &::before {
+    content: '♔';
+    font-size: 40px;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: $accent-color;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-field {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  color: $primary-color;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input, p-password {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid $primary-color;
+  border-radius: 5px;
+  background: white;
+  font-size: 16px;
+  transition: 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: $accent-color;
+  }
+}
+
+button {
+  width: 100%;
+  padding: 2px;
+  background: $primary-color;
+  color: $secondary-color;
+  border: solid 1px $primary-color;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background: $accent-color;
+    color: $primary-color;
+  }
+}
+
+p {
+  margin-top: 10px;
+  color: $primary-color;
+
+  a {
+    color: $accent-color;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+

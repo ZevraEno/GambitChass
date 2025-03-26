@@ -1,0 +1,111 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  p-table {
+    margin: 25px auto;
+    padding: 20px;
+    width: 75%;
+    border: 1px solid black;
+    border-radius: 10px;
+
+    th, td {
+      border-bottom: 1px solid black;
+      padding: 10px;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    .center, th {
+      text-align: center;
+    }
+
+    /* 🌟 Custom PrimeNG Paginator 🌟 */
+    .custom-paginator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .p-paginator {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .p-paginator .p-paginator-pages {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* 🎨 Style des numéros de page */
+    .p-paginator .p-paginator-page {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      background: #f4f4f4;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .p-paginator .p-paginator-page:hover {
+      background: #007bff;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    /* 🔵 Page active */
+    .p-paginator .p-paginator-page.p-highlight {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0px 3px 6px rgba(0, 123, 255, 0.4);
+    }
+
+    /* 🏹 Boutons de navigation */
+    .p-paginator .p-paginator-first,
+    .p-paginator .p-paginator-prev,
+    .p-paginator .p-paginator-next,
+    .p-paginator .p-paginator-last {
+      background: #007bff;
+      color: white;
+      border-radius: 8px;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+    }
+
+    .p-paginator .p-paginator-first:hover,
+    .p-paginator .p-paginator-prev:hover,
+    .p-paginator .p-paginator-next:hover,
+    .p-paginator .p-paginator-last:hover {
+      background: #0056b3;
+    }
+
+    /* 🎚 Dropdown pour sélectionner le nombre d'éléments par page */
+    .p-paginator .p-dropdown {
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      padding: 6px;
+    }
+  }
+
+}
+
+

@@ -1,0 +1,33 @@
+<div class="presentation">
+  <h2>Bienvenue sur ChessTM!</h2>
+  <p>Tu retrouveras ici toutes les informationss sur les tournois d'échecs et bien plus.</p>
+  <p>Nous vous souhaitons une bonne visite!</p>
+</div>
+
+<div class="tables">
+  <div class="card">
+    <h3>Tournois récents</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Lieu</th>
+        <th>Date de début</th>
+        <th>Elo</th>
+        <th>Joueurs</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (tournament of tournaments; track tournament.id) {
+          <tr>
+            <td>{{ tournament.name }}</td>
+            <td>{{ tournament.place }}</td>
+            <td class="numbers">{{ tournament.startDate }}</td>
+            <td class="numbers">{{ tournament.minElo }} - {{ tournament.maxElo }}</td>
+            <td class="numbers">{{ tournament.nbrOfPlayer }}/{{ tournament.maxPlayer }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
