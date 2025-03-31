@@ -12,9 +12,17 @@ export const routes: Routes = [
       import("./features/home/pages/home/home.component").then(m => m.HomeComponent),
   },
   {
-    path: "tournament",
+    path: 'tournament',
     loadComponent: () =>
       import("./features/tournament/pages/tournament-index/tournament-index.component").then(m => m.TournamentIndexComponent),
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./features/profile/pages/profile-update/profile-update.component').then(m => m.ProfileUpdateComponent),
+  },
+  {
+    path: 'stats',
+    loadComponent: () => import('./features/profile/pages/profile-stats/profile-stats.component').then(m => m.ProfileStatsComponent),
   },
   {
     path: 'login',
