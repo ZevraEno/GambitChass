@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {TournamentPagesDtoModel} from '../models/tournament-pages-dto.model';
 import {TournamentDetailsDtoModel} from '../models/tournament-details-dto.model';
 import {TournamentLeaderboardDtoModel} from '../models/tournament-leaderboard-dto.model';
+import {TournamentCreateFormModel} from '../models/tournament-create-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,10 @@ export class TournamentService {
   getLeaderboard(tournamentId: number) {
     return this._http.get<TournamentLeaderboardDtoModel[]>
     (`${environment.API_URL}/tournaments/${tournamentId}/leaderboard?tournamentId=${tournamentId}`);
+  }
+
+  createTournament(tournament: TournamentCreateFormModel){
+    return this._http.post(`${environment.API_URL}/admin/tournaments/create`, tournament);
   }
 
 }
