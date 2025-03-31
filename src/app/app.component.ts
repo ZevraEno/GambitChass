@@ -80,6 +80,11 @@ export class AppComponent {
       routerLink: '/profile',
     },
     {
+      label: 'Stats',
+      icon: 'pi pi-chart-bar',
+      routerLink: '/stats',
+    },
+    {
       label: 'Login',
       icon: 'pi pi-user',
       routerLink: '/login',
