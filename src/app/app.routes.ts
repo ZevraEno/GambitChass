@@ -17,6 +17,10 @@ export const routes: Routes = [
       import("./features/tournament/pages/tournament-index/tournament-index.component").then(m => m.TournamentIndexComponent),
   },
   {
+    path: 'profile',
+    loadComponent: () => import('./features/profile/pages/profile-update/profile-update.component').then(m => m.ProfileUpdateComponent),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent),
   },

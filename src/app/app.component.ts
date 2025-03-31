@@ -71,9 +71,13 @@ export class AppComponent {
     },
     {
       label: 'Tournaments',
-      icon: 'pi pi-home',
       icon: 'pi pi-trophy',
       routerLink: '/tournament',
+    },
+    {
+      label: 'Profile',
+      icon: 'pi pi-user',
+      routerLink: '/profile',
     },
     {
       label: 'Login',
