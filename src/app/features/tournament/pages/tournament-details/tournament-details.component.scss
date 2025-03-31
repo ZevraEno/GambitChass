@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: column;
 
-  .buttons {
+  .admin {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
+    gap: 20px;
   }
 }
