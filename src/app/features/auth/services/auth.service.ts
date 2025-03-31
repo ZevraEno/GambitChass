@@ -2,7 +2,8 @@ import {inject, Injectable} from '@angular/core';
 import {RegisterFormModel} from '../models/register-form.model';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import { LoginRequest, AuthResponse } from '../models/auth.model';
+import {AuthResponse, LoginFormModel} from '../models/login-form.model';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,11 @@ import { LoginRequest, AuthResponse } from '../models/auth.model';
 export class AuthService {
   private readonly _http: HttpClient = inject(HttpClient);
 
-  constructor() {}
+  constructor() {
+  }
 
   login(form: LoginFormModel): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/login`, data);
+    return this._http.post<AuthResponse>(`${environment.API_URL}/login`, form);
   }
 
   register(form: RegisterFormModel) {
