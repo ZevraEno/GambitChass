@@ -1,41 +1,5 @@
 <h2>Tournois</h2>
 
-<!--<div class="card">-->
-<!--  <table>-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--      <th>Name</th>-->
-<!--      <th>Lieu</th>-->
-<!--      <th>Date de début</th>-->
-<!--      <th>Status</th>-->
-<!--      <th>Elo</th>-->
-<!--      <th>Joueurs</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--      @for (tournament of tournaments; track tournament.id) {-->
-<!--        <tr>-->
-<!--          <td>{{ tournament.name }}</td>-->
-<!--          <td>{{ tournament.place }}</td>-->
-<!--          <td class="center">{{ tournament.startDate }}</td>-->
-<!--          <td class="center">{{ tournament.status }}</td>-->
-<!--          <td class="center">{{ tournament.minElo }} - {{ tournament.maxElo }}</td>-->
-<!--          <td class="center">{{ tournament.nbrOfPlayer }}/{{ tournament.maxPlayer }}</td>-->
-<!--        </tr>-->
-<!--      }-->
-<!--    </tbody>-->
-<!--  </table>-->
-<!--</div>-->
-
-<!--<div class="buttons">-->
-<!--  @if (!pageable.first) {-->
-<!--    <p-button (click)="previousPage()" icon="pi pi-angle-left" aria-label="Save"/>-->
-<!--  }-->
-<!--  @if (!pageable.last) {-->
-<!--    <p-button (click)="nextPage()" icon="pi pi-angle-right" aria-label="Save"/>-->
-<!--  }-->
-<!--</div>-->
-
 <p-table
   [value]="tournaments"
 >
@@ -51,7 +15,7 @@
   </ng-template>
   <ng-template #body let-tournament>
     <tr>
-      <td>{{ tournament.name }}</td>
+      <td [routerLink]="'/tournament/' + tournament.id">{{ tournament.name }}</td>
       <td>{{ tournament.place }}</td>
       <td class="center">{{ tournament.startDate }}</td>
       <td class="center">{{ tournament.status }}</td>

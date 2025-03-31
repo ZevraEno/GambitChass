@@ -4,12 +4,14 @@ import {TournamentService} from '../../services/tournament.service';
 import {TournamentShortDtoModel} from '../../models/tournament-short-dto.model';
 import {TableModule} from 'primeng/table';
 import {Paginator, PaginatorState} from 'primeng/paginator';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-tournament-index',
   imports: [
     TableModule,
-    Paginator
+    Paginator,
+    RouterLink
   ],
   templateUrl: './tournament-index.component.html',
   styleUrl: './tournament-index.component.scss'

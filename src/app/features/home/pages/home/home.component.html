@@ -1,33 +1,31 @@
 <div class="presentation">
-  <h2>Bienvenue sur ChessTM!</h2>
-  <p>Tu retrouveras ici toutes les informationss sur les tournois d'échecs et bien plus.</p>
-  <p>Nous vous souhaitons une bonne visite!</p>
+  <h2>Welcome to ChessTM!</h2>
+  <p>You will find here all the information about chess tournaments and much more.</p>
+  <p>We wish you to spend a good time.</p>
 </div>
 
 <div class="tables">
-  <div class="card">
-    <h3>Tournois récents</h3>
-    <table>
-      <thead>
+  <p-table [value]="tournaments">
+    <ng-template #caption>
+      <h3>Recent tournaments</h3>
+    </ng-template>
+    <ng-template #header >
       <tr>
         <th>Name</th>
-        <th>Lieu</th>
-        <th>Date de début</th>
+        <th>Location</th>
+        <th>Starting date</th>
         <th>Elo</th>
-        <th>Joueurs</th>
+        <th>Players</th>
       </tr>
-      </thead>
-      <tbody>
-        @for (tournament of tournaments; track tournament.id) {
-          <tr>
-            <td>{{ tournament.name }}</td>
-            <td>{{ tournament.place }}</td>
-            <td class="numbers">{{ tournament.startDate }}</td>
-            <td class="numbers">{{ tournament.minElo }} - {{ tournament.maxElo }}</td>
-            <td class="numbers">{{ tournament.nbrOfPlayer }}/{{ tournament.maxPlayer }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+    </ng-template>
+    <ng-template #body let-tournament>
+      <tr [routerLink]="'/tournament/' + tournament.id">
+        <td>{{ tournament.name }}</td>
+        <td>{{ tournament.place }}</td>
+        <td class="numbers">{{ tournament.startDate }}</td>
+        <td class="numbers">{{ tournament.minElo }} - {{ tournament.maxElo }}</td>
+        <td class="numbers">{{ tournament.nbrOfPlayer }}/{{ tournament.maxPlayer }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
