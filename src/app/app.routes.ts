@@ -24,4 +24,9 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent),
   },
+  {
+    path: 'tournament/:id',
+    loadComponent: () =>
+      import('./features/tournament/pages/tournament-details/tournament-details.component').then(m => m.TournamentDetailsComponent),
+  },
 ];

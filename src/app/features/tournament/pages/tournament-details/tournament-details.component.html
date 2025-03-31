@@ -1,0 +1,43 @@
+<!--<h2>{{tournament.tournamentDTO.tournament.tournamentDTODTO.name}}</h2>-->
+<!--<h3>{{tournament.tournamentDTO.tournament.tournamentDTODTO.place}} - starts on {{tournament.tournamentDTO.tournament.tournamentDTODTO.startDate}}</h3>-->
+
+
+<div class="container mx-auto p-6 max-w-3xl">
+  <div class="shadow-lg rounded-2xl bg-white p-6">
+    <h1 class="text-2xl font-bold mb-2">{{ tournament.tournamentDTO.name }}</h1>
+    <p class="text-gray-600 mb-4">
+      <strong>Location:</strong> {{ tournament.tournamentDTO.place }}
+    </p>
+    <div class="flex flex-wrap gap-2 mb-4">
+      <span
+        class="bg-blue-500 text-white text-sm font-semibold px-3 py-1 rounded"><em>{{ tournament.tournamentDTO.status }}</em></span>
+      <span class="bg-gray-500 text-white text-sm font-semibold px-3 py-1 rounded"
+            *ngFor="let category of tournament.tournamentDTO.categories">{{ category }}</span>
+    </div>
+    <p class="text-gray-700">
+      <strong>Players:</strong> {{ tournament.tournamentDTO.nbrOfPlayer }}
+      (Min: {{ tournament.tournamentDTO.minPlayer }}, Max: {{ tournament.tournamentDTO.maxPlayer }})
+    </p>
+    <p class="text-gray-700">
+      <strong>Elo:</strong> {{ tournament.tournamentDTO.minElo }} - {{ tournament.tournamentDTO.maxElo }}
+    </p>
+    <p class="text-gray-700">
+      <strong>Starts on:</strong> {{ tournament.tournamentDTO.startDate }}
+    </p>
+    <p class="text-gray-700">
+      <strong>Current round:</strong> {{ tournament.tournamentDTO.currentRound }}
+    </p>
+  </div>
+</div>
+
+<div class="buttons">
+  <div class="admin">
+    <p-button label="Start Tournament"></p-button>
+    <p-button label="Next Round" severity="info"></p-button>
+    <p-button label="Delete Tournament" severity="danger"></p-button>
+  </div>
+  <div class="member">
+    <p-button label="Register for tournament"></p-button>
+    <p-button label="Unregister for tournament" severity="danger"></p-button>
+  </div>
+</div>
