@@ -9,9 +9,6 @@ import {environment} from '../../../../environments/environment';
 export class AuthService {
   private readonly _http: HttpClient = inject(HttpClient);
 
-  constructor() {
-  }
-
   register(form: RegisterFormModel) {
     return this._http.post<RegisterFormModel>(`${environment.API_URL}/auth/register`, form);
   }
