@@ -1,24 +1,7 @@
 import {TournamentShortDtoModel} from './tournament-short-dto.model';
+import {TournamentMatchDtoModel} from './tournament-match-dto.model';
 
 export interface TournamentDetailsDtoModel {
   tournamentDTO: TournamentShortDtoModel;
-  matches: [
-    {
-      id: number;
-      roundNumber: number;
-      matchResult: "WAITING" | "BLACK" | "WHITE" | "DRAW";
-      tournamentName: string;
-      tournamentId: number;
-      whitePlayer: {
-        pseudonym: string;
-        birthDate: Date;
-        elo: number;
-      }
-      blackPlayer: {
-        pseudonym: string;
-        birthDate: Date;
-        elo: number;
-      }
-    }
-  ]
+  matches: TournamentMatchDtoModel[];
 }

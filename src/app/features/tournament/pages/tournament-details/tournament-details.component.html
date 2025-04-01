@@ -52,8 +52,8 @@
     </p-tabpanel>
     <p-tabpanel value="1">
       <h2>Matches</h2>
-      @if (tournament?.tournamentDTO?.status !== "WAITING"){
-        <p-table [value]="tournament.matches">
+      @if (matches){
+        <p-table [value]="matches">
           <ng-template #header>
             <tr>
               <td>White</td>
