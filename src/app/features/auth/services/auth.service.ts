@@ -36,9 +36,4 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     this.currentUser.set(undefined);
   }
-
-  getToken(): string | null {
-    const user = this.currentUser();
-    return user ? user.accessToken : null;
-  }
 }
