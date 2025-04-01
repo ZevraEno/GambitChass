@@ -3,6 +3,4 @@ export interface LoginFormModel {
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-}
+

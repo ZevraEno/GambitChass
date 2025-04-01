@@ -1,11 +1,21 @@
+<h2>Login</h2>
 <form [formGroup]="loginForm" (ngSubmit)="submit()">
-  <p-floatlabel variant="on">
-    <input pInputText type="text" id="pseudonym" formControlName="pseudonym"/>
+    @if (failure) {
+      <p-card>
+        <div class="red">
+          {{ failure }}
+        </div>
+      </p-card>
+    }
+  <p-float-label variant="in">
+    <input pInputText type="text" id="pseudonym" formControlName="pseudonym" fluid="true" />
     <label for="pseudonym">Pseudonym</label>
-  </p-floatlabel>
-  <p-floatlabel variant="on">
-    <p-password formControlName="password" id="password" [toggleMask]="true"></p-password>
+  </p-float-label>
+
+  <p-float-label variant="in">
+    <p-password formControlName="password" id="password" [toggleMask]="true" fluid="true"></p-password>
     <label for="password">Password</label>
-  </p-floatlabel>
-  <p-button severity="success" label="Login" type="submit"></p-button>
+  </p-float-label>
+
+  <p-button severity="info" label="Login" type="submit" size="large" fluid="true"></p-button>
 </form>

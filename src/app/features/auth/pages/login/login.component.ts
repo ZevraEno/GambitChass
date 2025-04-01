@@ -5,6 +5,8 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Password} from 'primeng/password';
 import {Button} from 'primeng/button';
+import {Router} from '@angular/router';
+import {Card} from 'primeng/card';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +15,8 @@ import {Button} from 'primeng/button';
     FloatLabel,
     InputText,
     Password,
-    Button
+    Button,
+    Card
   ],
   templateUrl: './login.component.html',
   standalone: true,
@@ -22,6 +25,8 @@ import {Button} from 'primeng/button';
 export class LoginComponent {
   private readonly _fb: FormBuilder = inject(FormBuilder);
   private readonly _authService: AuthService = inject(AuthService);
+  private readonly _router: Router = inject(Router);
+  failure?: string;
 
   @Output()
   private readonly close: EventEmitter<void> = new EventEmitter();
@@ -44,11 +49,17 @@ export class LoginComponent {
     }
 
     this._authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
+        this._router.navigate(['/']).then();
       },
       error: (err) => {
-        console.log(err);
+        if (typeof err.error === "string") {
+          this.failure = err.error;
+        } else {
+          this.failure = Object.entries(err.error)
+            .map(([key, value]) => `The "${key}" value ${value}`)
+            .toString();
+        }
       }
     });
   }
