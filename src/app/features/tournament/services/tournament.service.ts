@@ -32,7 +32,7 @@ export class TournamentService {
   }
 
   startTournament(tournament: TournamentDetailsDtoModel) {
-    return this._http.post<TournamentDetailsDtoModel>(`${environment.API_URL}/admin/tournaments/${tournament.tournamentDTO.id}/start`, tournament);
+    return this._http.post<void>(`${environment.API_URL}/admin/tournaments/${tournament.tournamentDTO.id}/start`, null);
   }
 
   nextRound(tournament: TournamentDetailsDtoModel) {
