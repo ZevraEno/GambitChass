@@ -1,20 +1,20 @@
-import {Injectable} from '@angular/core';
-import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
+import {inject} from '@angular/core';
 import {AuthService} from '../../auth/services/auth.service';
+import {UserTokenDto} from '../../auth/models/user-token-dto';
 
-@Injectable()
-export class JwtInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {
-  }
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.authService.getToken();
-    if (token) {
-      req = req.clone({
-        setHeaders: {Authorization: `Bearer ${token}`}
+  const authService: AuthService = inject(AuthService);
+  let currentUser: UserTokenDto | undefined = authService.currentUser();
+  if(currentUser) {
+    let token = currentUser.accessToken;
+    if(token) {
+      let clone = req.clone({
+        headers: req.headers.append('Authorization', `Bearer ${token}`),
       });
+      return next(clone);
     }
-    return next.handle(req);
   }
-}
+  return next(req);
+};

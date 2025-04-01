@@ -1,41 +1,54 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {Router, RouterLink} from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
+import {FloatLabel} from 'primeng/floatlabel';
+import {InputText} from 'primeng/inputtext';
+import {Password} from 'primeng/password';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
   imports: [
-    FormsModule,
-    RouterLink
+    ReactiveFormsModule,
+    FloatLabel,
+    InputText,
+    Password,
+    Button
   ],
-  standalone: true
+  templateUrl: './login.component.html',
+  standalone: true,
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
-  errorMessage: string = '';
+  private readonly _fb: FormBuilder = inject(FormBuilder);
+  private readonly _authService: AuthService = inject(AuthService);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  @Output()
+  private readonly close: EventEmitter<void> = new EventEmitter();
 
-  login() {
-    const loginData = {
-      email: this.email, password: this.password
-    };
+  loginForm: FormGroup;
 
-    this.http.post<{
-      token: string
-    }>('/api/auth/login', loginData)
-      .subscribe({
-        next: (response) => {
-          localStorage.setItem('jwt', response.token);
-          this.router.navigate(['/dashboard']);
-        },
-        error: () => {
-          this.errorMessage = "Identifiants incorrects. Veuillez réessayer.";
-        }
-      });
+  constructor() {
+    this.loginForm = this._fb.group({
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required]],
+    });
+  }
+
+  submit() {
+
+    this.loginForm.markAllAsTouched();
+
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    this._authService.login(this.loginForm.value).subscribe({
+      next: () => {
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 }

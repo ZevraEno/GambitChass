@@ -5,6 +5,7 @@ import {ChartData} from 'chart.js';
 
 @Component({
   selector: 'app-profile-stats',
+  standalone: true,
   imports: [
     UIChart
   ],
