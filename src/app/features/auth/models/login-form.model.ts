@@ -1,4 +1,8 @@
 export interface LoginFormModel {
-  email: string;
-password: string;
+  pseudonym: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
 }

@@ -1,39 +1,40 @@
 import {Component, EventEmitter, inject, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {samePasswordValidator} from '../../validators/same-password.validator';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Password} from 'primeng/password';
 import {Button} from 'primeng/button';
 
 @Component({
-selector: 'app-login',
-imports: [
-ReactiveFormsModule,
-FloatLabel,
-InputText,
-Password,
-Button
-],
-templateUrl: './login.component.html',
-styleUrl: './login.component.scss'
+  selector: 'app-login',
+  imports: [
+    ReactiveFormsModule,
+    FloatLabel,
+    InputText,
+    Password,
+    Button
+  ],
+  templateUrl: './login.component.html',
+  standalone: true,
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-private readonly _fb: FormBuilder = inject(FormBuilder);
-private readonly _authService: AuthService = inject(AuthService);
+  private readonly _fb: FormBuilder = inject(FormBuilder);
+  private readonly _authService: AuthService = inject(AuthService);
 
-@Output()
-private readonly close: EventEmitter<void> = new EventEmitter();
+  @Output()
+  private readonly close: EventEmitter<void> = new EventEmitter();
 
-loginForm: FormGroup;
+  loginForm: FormGroup;
 
-constructor() {
+  constructor() {
     this.loginForm = this._fb.group({
-      email: [null, [Validators.required, Validators.email]],
+      pseudonym: [null, [Validators.required]],
       password: [null, [Validators.required]],
     });
   }
+
   submit() {
 
     this.loginForm.markAllAsTouched();
@@ -41,16 +42,14 @@ constructor() {
     if (this.loginForm.invalid) {
       return;
     }
+
     this._authService.login(this.loginForm.value).subscribe({
-      next: () => {
-        this.closeForm();
+      next: (res) => {
+        console.log(res);
       },
       error: (err) => {
         console.log(err);
       }
     });
-  }
-  closeForm() {
-    this.close.emit();
   }
 }

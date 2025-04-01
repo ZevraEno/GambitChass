@@ -1,10 +1,10 @@
 export interface UserTokenDto {
   accessToken: string;
-user: UserSessionDto;
+  user: UserSessionDto;
 }
 
 export interface UserSessionDto {
-id: number;
-username: string;
-email: string;
+  id: number;
+  username: string;
+  email: string;
 }
