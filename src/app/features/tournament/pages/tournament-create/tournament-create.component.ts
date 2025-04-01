@@ -9,9 +9,8 @@ import {NgStyle} from '@angular/common';
 import {DatePicker} from 'primeng/datepicker';
 import {Checkbox} from 'primeng/checkbox';
 import {Button} from 'primeng/button';
-import {RegisterFormModel} from '../../../auth/models/register-form.model';
-import {TournamentCreateFormModel} from '../../models/tournament-create-form.model';
 import {TournamentService} from '../../services/tournament.service';
+import {TournamentCreateFormModel} from '../../models/tournament-create-form.model';
 
 @Component({
   selector: 'app-tournament-create',
@@ -44,11 +43,11 @@ export class TournamentCreateComponent {
       place: [null, [Validators.required, Validators.maxLength(100)]],
       minPlayer: [null, [Validators.required, Validators.min(2)]],
       maxPlayer: [null, [Validators.required]],
-      minElo: [null, [Validators.required, Validators.min(0)]],
-      maxElo: [null, [Validators.required, Validators.max(3000)]],
-      categories: [[], [Validators.required]],
+      minElo: [null, [Validators.required, Validators.min(0), Validators.max(3000)]],
+      maxElo: [null, [Validators.required, Validators.min(0), Validators.max(3000)]],
+      categories: [null, [Validators.required]],
       startDate: [null, [Validators.required]],
-      womenOnly: [null, [Validators.required]],
+      womenOnly: [false, [Validators.required]],
     });
     this.categories = [
       { name: 'Junior', code: 'JUNIOR' },
@@ -60,11 +59,27 @@ export class TournamentCreateComponent {
   }
 
   onSubmit() {
+
     this.tournamentForm.markAllAsTouched();
     if (this.tournamentForm.invalid) {
       return;
     }
+    let codes: any[] = []
+    this.categories.forEach((c) => {
+      codes.push(c.code);
+    })
 
+    const testForm= this.tournamentForm.value;
+    const form: TournamentCreateFormModel = {
+      ...testForm,
+      categories: codes,
+      startDate: testForm.startDate.toISOString(),
+    }
+    console.log(form);
+
+    this._tournamentService.createTournament(form).subscribe({
+      next: () => this._router.navigate(['/tournament']).then()
+    })
 
   }
 
