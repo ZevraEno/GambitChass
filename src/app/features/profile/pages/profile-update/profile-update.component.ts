@@ -10,6 +10,7 @@ import {ProfileService} from '../../service/profile.service';
 import {Router} from '@angular/router';
 import {Card} from 'primeng/card';
 import {ProfileUpdateFormModel} from '../../models/profile-update-form.model';
+import {AuthService} from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-profile-update',
@@ -120,6 +121,7 @@ import {ProfileUpdateFormModel} from '../../models/profile-update-form.model';
   `
 })
 export class ProfileUpdateComponent {
+  private readonly _authService: AuthService = inject(AuthService);
   private readonly _profileService: ProfileService = inject(ProfileService);
   private readonly _fb: FormBuilder = inject(FormBuilder);
   private readonly _router: Router = inject(Router);
@@ -146,7 +148,7 @@ export class ProfileUpdateComponent {
     this._profileService.delete().subscribe(
       {
         next: _ => {
-          // TODO: Logout the current user
+          this._authService.logout();
           this._router.navigate(['/']).then();
         }
       }
