@@ -14,6 +14,7 @@ import {MenuItem} from 'primeng/api';
     PanelMenu,
     CardModule,
     RouterOutlet,
+
   ],
   styles: `
     :host {
@@ -79,11 +80,13 @@ export class AppComponent {
           label: 'Home',
           icon: 'pi pi-home',
           routerLink: '/home',
+          routerLinkActiveOptions: {exact: true},
         },
         {
           label: 'Tournaments',
           icon: 'pi pi-trophy',
           routerLink: '/tournament',
+          routerLinkActiveOptions: {exact: false},
         }
       ];
       if (this.isConnected()) {
@@ -93,11 +96,13 @@ export class AppComponent {
             label: 'Profile',
             icon: 'pi pi-user',
             routerLink: '/profile',
+            routerLinkActiveOptions: {exact: true},
           },
           {
             label: 'Stats',
             icon: 'pi pi-chart-bar',
             routerLink: '/stats',
+            routerLinkActiveOptions: {exact: true},
           },
           {
             label: 'Logout',
@@ -115,11 +120,13 @@ export class AppComponent {
             label: 'Login',
             icon: 'pi pi-user',
             routerLink: '/login',
+            routerLinkActiveOptions: {exact: true},
           },
           {
             label: 'Register',
             icon: 'pi pi-user-plus',
             routerLink: '/register',
+            routerLinkActiveOptions: {exact: true},
           }
         ];
       }
