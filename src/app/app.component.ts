@@ -70,12 +70,12 @@ export class AppComponent {
   items: MenuItem[] = [];
   currentUser: WritableSignal<UserTokenDto | undefined>;
   isConnected: Signal<boolean>;
-  role: string | undefined;
+  role: Signal<string | undefined>;
 
   constructor() {
     this.currentUser = this._authService.currentUser;
-    this.role = this.currentUser()?.user.role;
     this.isConnected = computed(() => !!this.currentUser());
+    this.role = computed(() => this.currentUser()?.user.role);
     effect(() => {
       this.items = [
         {
@@ -115,7 +115,24 @@ export class AppComponent {
             }
           }
         ];
-      } else if (!this.isConnected()) {
+        if (this.role() === 'USER') {
+          // TODO: Add USERS-only menu links
+          this.items = [
+            ...this.items,
+            {
+              label: 'UrUser (ToDelete)',
+            },
+          ];
+        } else if (this.role() === 'ADMIN') {
+          // TODO: Add ADMIN-only menu links
+          this.items = [
+            ...this.items,
+            {
+              label: 'UrAdmin (ToDelete)',
+            },
+          ];
+        }
+      } else {
         this.items = [
           ...this.items,
           {
@@ -131,10 +148,6 @@ export class AppComponent {
             routerLinkActiveOptions: {exact: true},
           }
         ];
-      } else if (this.role === 'USER') {
-        // TODO: Add USER-only menu links
-      } else if (this.role === 'ADMIN') {
-        // TODO: Add ADMIN-only menu links
       }
     });
   }
