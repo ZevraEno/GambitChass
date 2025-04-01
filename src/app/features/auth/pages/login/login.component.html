@@ -1,7 +1,7 @@
 <form [formGroup]="loginForm" (ngSubmit)="submit()">
   <p-floatlabel variant="on">
-    <input pInputText type="email" id="email" formControlName="email"/>
-    <label for="email">Email</label>
+    <input pInputText type="text" id="pseudonym" formControlName="pseudonym"/>
+    <label for="pseudonym">Pseudonym</label>
   </p-floatlabel>
   <p-floatlabel variant="on">
     <p-password formControlName="password" id="password" [toggleMask]="true"></p-password>

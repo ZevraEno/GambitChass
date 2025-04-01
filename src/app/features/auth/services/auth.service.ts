@@ -23,7 +23,7 @@ export class AuthService {
     return this._http.post<RegisterFormModel>(`${environment.API_URL}/auth/register`, form);
   }
 
-  login(form: LoginFormModel): Observable<UserTokenDto> {
+  login(form: LoginFormModel) {
     return this._http.post<UserTokenDto>(`${environment.API_URL}/auth/login`, form).pipe(
       tap(result => {
         this.currentUser.set(result);

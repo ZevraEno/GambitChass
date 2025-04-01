@@ -30,7 +30,7 @@ export class LoginComponent {
 
   constructor() {
     this.loginForm = this._fb.group({
-      email: [null, [Validators.required, Validators.email]],
+      pseudonym: [null, [Validators.required]],
       password: [null, [Validators.required]],
     });
   }
@@ -44,7 +44,8 @@ export class LoginComponent {
     }
 
     this._authService.login(this.loginForm.value).subscribe({
-      next: () => {
+      next: (res) => {
+        console.log(res);
       },
       error: (err) => {
         console.log(err);
