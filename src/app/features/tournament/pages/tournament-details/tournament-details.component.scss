@@ -7,4 +7,21 @@
     justify-content: flex-end;
     gap: 20px;
   }
+
+  .details {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    width: 100%;
+
+    .details-info{
+      display: flex;
+      flex-direction: column;
+    }
+
+    .details-players{
+      margin-right: 20px;
+    }
+  }
+
 }

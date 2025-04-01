@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject, Signal, WritableSignal} from '@angular/core';
 import {TournamentPagesDtoModel} from '../../models/tournament-pages-dto.model';
 import {TournamentService} from '../../services/tournament.service';
 import {TournamentShortDtoModel} from '../../models/tournament-short-dto.model';
@@ -6,6 +6,8 @@ import {TableModule} from 'primeng/table';
 import {Paginator, PaginatorState} from 'primeng/paginator';
 import {RouterLink} from '@angular/router';
 import {Button} from 'primeng/button';
+import {AuthService} from '../../../auth/services/auth.service';
+import {UserTokenDto} from '../../../auth/models/user-token-dto';
 
 @Component({
   selector: 'app-tournament-index',
@@ -21,14 +23,13 @@ import {Button} from 'primeng/button';
 export class TournamentIndexComponent{
 
   private readonly _tournamentService: TournamentService = inject(TournamentService);
+  private readonly _authService: AuthService = inject(AuthService);
 
   tournaments!: TournamentShortDtoModel[];
   pageable!: TournamentPagesDtoModel
   first: number = 0;
   rows: number = 10;
   totalElements!: number;
-
-
 
   constructor() {
     this._tournamentService.getAllTournaments().subscribe({
@@ -56,5 +57,9 @@ export class TournamentIndexComponent{
         console.log(error);
       }
     })
+  }
+
+  isAdmin() {
+    return this._authService.currentUser()?.user.role === 'ADMIN';
   }
 }

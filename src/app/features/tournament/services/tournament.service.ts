@@ -40,7 +40,7 @@ export class TournamentService {
   }
 
   deleteTournament(tournamentId: number) {
-    return this._http.delete<void>(`${environment.API_URL}/admin/tournaments/${tournamentId}`);
+    return this._http.delete<void>(`${environment.API_URL}/admin/tournaments/${tournamentId}/delete`);
   }
 
   //TODO: ajouter l'UserTokenDTO
@@ -55,11 +55,15 @@ export class TournamentService {
 
   getLeaderboard(tournamentId: number) {
     return this._http.get<TournamentLeaderboardDtoModel[]>
-    (`${environment.API_URL}/tournaments/${tournamentId}/leaderboard?tournamentId=${tournamentId}`);
+    (`${environment.API_URL}/tournaments/${tournamentId}/leaderboard`);
   }
 
   createTournament(tournament: TournamentCreateFormModel){
     return this._http.post(`${environment.API_URL}/admin/tournaments/create`, tournament);
+  }
+
+  deletePlayerTournament(tournamentId: number) {
+    return this._http.delete(`${environment.API_URL}/admin/tournaments/${tournamentId}/delete`);
   }
 
 }

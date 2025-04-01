@@ -1,9 +1,17 @@
-<div class="admin">
-  <p-button (click)="startTournament(tournament)" label="Start Tournament"></p-button>
-  <p-button (click)="nextRound(tournament)" label="Next Round" severity="info"></p-button>
-  <p-button (click)="deleteTournament(tournament.tournamentDTO.id)" label="Delete Tournament" severity="danger"></p-button>
-</div>
-
+@if (isAdmin()) {
+  <div class="admin">
+    @if (tournament?.tournamentDTO?.status === "WAITING") {
+      <p-button (click)="startTournament(tournament)" label="Start Tournament"></p-button>
+    }
+    @if (tournament?.tournamentDTO?.status === "IN_PROGRESS") {
+      <p-button (click)="nextRound(tournament)" label="Next Round" severity="info"></p-button>
+    }
+    @if (tournament?.tournamentDTO?.status !== "IN_PROGRESS") {
+      <p-button (click)="deleteTournament(tournament.tournamentDTO.id)" label="Delete Tournament"
+                severity="danger"></p-button>
+    }
+  </div>
+}
 <p-tabs value="0">
   <p-tablist>
     <p-tab value="0">Details</p-tab>
@@ -12,15 +20,16 @@
   </p-tablist>
   <p-tabpanels>
     <p-tabpanel value="0">
-      <div class="container mx-auto p-6 max-w-3xl">
-        <div class="shadow-lg rounded-2xl bg-white p-6">
+      <div class="container mx-auto p-6 max-w-3xl details">
+        <div class="shadow-lg rounded-2xl bg-white p-6 details-info">
           <h2 class="text-2xl font-bold mb-2">{{ tournament?.tournamentDTO?.name }}</h2>
           <p class="text-gray-600 mb-4">
             <strong>Location:</strong> {{ tournament?.tournamentDTO?.place }}
           </p>
           <div class="flex flex-wrap gap-2 mb-4">
-      <span
-        class="bg-blue-500 text-white text-sm font-semibold px-3 py-1 rounded"><em>{{ tournament?.tournamentDTO?.status }}</em></span>
+            <span class="bg-blue-500 text-white text-sm font-semibold px-3 py-1 rounded">
+              <em>{{ tournament?.tournamentDTO?.status }}</em>
+            </span>
             <p class="text-gray-700">
               <strong>Categories :</strong>
               <br>
@@ -41,18 +50,37 @@
           <p class="text-gray-700">
             <strong>Current round:</strong> {{ tournament?.tournamentDTO?.currentRound }}
           </p>
+          <div class="member" *ngIf="tournament?.tournamentDTO?.status === 'WAITING'">
+            <p-button (click)="registerTournament(tournament.tournamentDTO.id)"
+                      label="Register for tournament"></p-button>
+            <p-button (click)="unregisterTournament(tournament.tournamentDTO.id)" label="Unregister for tournament"
+                      severity="danger"></p-button>
+          </div>
         </div>
-      </div>
-
-      <div class="member" *ngIf="tournament?.tournamentDTO?.status === 'WAITING'">
-        <p-button (click)="registerTournament(tournament.tournamentDTO.id)" label="Register for tournament"></p-button>
-        <p-button (click)="unregisterTournament(tournament.tournamentDTO.id)" label="Unregister for tournament"
-                  severity="danger"></p-button>
+        <div class="details-players">
+          <p-table [value]="players">
+            <ng-template #caption>
+              <h3>Players</h3>
+            </ng-template>
+            <ng-template #body let-player>
+              <tr>
+                <td>{{ player.pseudonym }}</td>
+                <td>{{ player.elo }} elo</td>
+                <td>
+                  @if (isAdmin() && tournament?.tournamentDTO?.status === "WAITING") {
+                    <p-button (click)="deletePlayer()" label="Delete"
+                              severity="danger"></p-button>
+                  }
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </div>
     </p-tabpanel>
     <p-tabpanel value="1">
       <h2>Matches</h2>
-      @if (matches){
+      @if (matches) {
         <p-table [value]="matches">
           <ng-template #header>
             <tr>
@@ -63,14 +91,22 @@
           </ng-template>
           <ng-template #body let-match>
             <tr>
-              <td>{{match.whitePlayer.elo}} {{match.whitePlayer.pseudonym}}</td>
-              @switch (match.matchResult){
-                @case ("WHITE") {<td>1 - 0</td>}
-                @case ("BLACK") {<td>0 - 1</td>}
-                @case ("DRAW") {<td>0.5 - 0.5</td>}
-                @default {<td> VS </td>}
+              <td>{{ match.whitePlayer.elo }} {{ match.whitePlayer.pseudonym }}</td>
+              @switch (match.matchResult) {
+                @case ("WHITE") {
+                  <td>1 - 0</td>
+                }
+                @case ("BLACK") {
+                  <td>0 - 1</td>
+                }
+                @case ("DRAW") {
+                  <td>0.5 - 0.5</td>
+                }
+                @default {
+                  <td> VS</td>
+                }
               }
-              <td>{{match.blackPlayer.pseudonym}} {{match.blackPlayer.elo}}</td>
+              <td>{{ match.blackPlayer.pseudonym }} {{ match.blackPlayer.elo }}</td>
             </tr>
           </ng-template>
         </p-table>
@@ -95,16 +131,16 @@
           </ng-template>
           <ng-template #body let-standing>
             <tr>
-              <td>{{standing.pseudonym}}</td>
-              <td>{{standing.nbrOfMatchsPlayed}}</td>
-              <td>{{standing.nbrOfMatchsWon}}</td>
-              <td>{{standing.nbrOfMatchsLost}}</td>
-              <td>{{standing.nbrOfMatchsDrawn}}</td>
-              <td>{{standing.points}}</td>
+              <td>{{ standing.pseudonym }}</td>
+              <td>{{ standing.nbrOfMatchsPlayed }}</td>
+              <td>{{ standing.nbrOfMatchsWon }}</td>
+              <td>{{ standing.nbrOfMatchsLost }}</td>
+              <td>{{ standing.nbrOfMatchsDrawn }}</td>
+              <td>{{ standing.points }}</td>
             </tr>
           </ng-template>
         </p-table>
-      }@else {
+      } @else {
         <p>This tournament has not started yet.</p>
       }
     </p-tabpanel>

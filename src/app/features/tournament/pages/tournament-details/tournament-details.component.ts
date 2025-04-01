@@ -8,6 +8,8 @@ import {NgForOf, NgIf} from '@angular/common';
 import {TournamentLeaderboardDtoModel} from '../../models/tournament-leaderboard-dto.model';
 import {TableModule} from 'primeng/table';
 import {TournamentMatchDtoModel} from '../../models/tournament-match-dto.model';
+import {AuthService} from '../../../auth/services/auth.service';
+import {MemberDetailsDtoModel} from '../../../auth/models/member-details-dto.model';
 
 @Component({
   selector: 'app-tournament-details',
@@ -27,6 +29,8 @@ import {TournamentMatchDtoModel} from '../../models/tournament-match-dto.model';
 })
 export class TournamentDetailsComponent implements OnInit {
 
+  private readonly _authService: AuthService = inject(AuthService);
+
   private readonly _tournamentService: TournamentService = inject(TournamentService);
   private readonly _ar: ActivatedRoute = inject(ActivatedRoute);
   private readonly _router: Router = inject(Router);
@@ -34,6 +38,7 @@ export class TournamentDetailsComponent implements OnInit {
   tournament!: TournamentDetailsDtoModel;
   standings!: TournamentLeaderboardDtoModel[] | null;
   matches!: TournamentMatchDtoModel[] | null;
+  players!: MemberDetailsDtoModel[];
 
   constructor() {}
 
@@ -44,12 +49,9 @@ export class TournamentDetailsComponent implements OnInit {
   //TODO: ajouter l'UserTokenDTO
   startTournament(tournament: TournamentDetailsDtoModel) {
     this._tournamentService.startTournament(tournament).subscribe({
-      next: () => {
-        this.getTournament();
-      },
+      next: () => this.getTournament(),
       error: err => console.log(err)
     });
-    this.getStandings(this.tournament.tournamentDTO.id);
   }
 
   //TODO: ajouter l'UserTokenDTO
@@ -58,7 +60,6 @@ export class TournamentDetailsComponent implements OnInit {
       next: datas => this.tournament = datas,
       error: err => console.log(err)
     });
-    this.getStandings(this.tournament.tournamentDTO.id);
   }
 
   //TODO: ajouter l'UserTokenDTO
@@ -75,6 +76,7 @@ export class TournamentDetailsComponent implements OnInit {
       this.tournament = tournament;
       this.tournament.matches.length === 0 ? this.matches = null : this.matches = this.tournament.matches;
       this.tournament.tournamentDTO.status !== "WAITING" ? this.getStandings(id) : this.standings = null;
+      this.players = tournament.tournamentDTO.members;
     });
   }
 
@@ -86,9 +88,20 @@ export class TournamentDetailsComponent implements OnInit {
   unregisterTournament(tournamentId: number) {
   }
 
+  deletePlayer() {
+    this._tournamentService.deletePlayerTournament(this.tournament.tournamentDTO.id).subscribe({
+      next: () => this.getTournament(),
+      error: err => console.error(err),
+    })
+  }
+
   getStandings(tournamentId: number) {
     this._tournamentService.getLeaderboard(tournamentId).subscribe(leaderboard => {
       this.standings = leaderboard;
     })
+  }
+
+  isAdmin() {
+    return this._authService.currentUser()?.user.role === 'ADMIN';
   }
 }
