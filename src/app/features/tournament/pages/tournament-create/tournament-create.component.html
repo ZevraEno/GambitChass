@@ -1,0 +1,86 @@
+<h2>Create tournament</h2>
+<form [formGroup]="tournamentForm" (ngSubmit)="onSubmit()">
+  <p-float-label variant="in">
+    <input
+      pInputText
+      id="name"
+      formControlName="name"
+      fluid="true"/>
+    <label for="name">Name</label>
+  </p-float-label>
+  <p-float-label variant="in">
+    <input
+      pInputText
+      id="place"
+      formControlName="place"
+      fluid="true"/>
+    <label for="place">Place</label>
+  </p-float-label>
+  <div class="form-group">
+    <p-float-label variant="in">
+      <p-input-number
+        id="minPlayer"
+        formControlName="minPlayer"
+        min="2"
+        mode="decimal"
+        step="1"
+        showButtons="true"
+        fluid="true"/>
+      <label for="minPlayer">Minimum of Players</label>
+    </p-float-label>
+    <p-float-label variant="in">
+      <p-input-number
+        id="maxPlayer"
+        formControlName="maxPlayer"
+        min="2"
+        mode="decimal"
+        step="1"
+        showButtons="true"
+        fluid="true"/>
+      <label for="maxPlayer">Maximum of Players</label>
+    </p-float-label>
+  </div>
+  <div class="form-group">
+    <p-float-label variant="in">
+      <p-input-number
+        id="minElo"
+        formControlName="minElo"
+        min="0"
+        max="3000"
+        mode="decimal"
+        step="100"
+        showButtons="true"
+        fluid="true"/>
+      <label for="minElo">Elo minimum</label>
+    </p-float-label>
+    <p-float-label variant="in">
+      <p-input-number
+        id="maxElo"
+        formControlName="maxElo"
+        min="0"
+        max="3000"
+        mode="decimal"
+        step="100"
+        showButtons="true"
+        fluid="true"/>
+      <label for="maxElo">Elo maximum</label>
+    </p-float-label>
+  </div>
+  <p-float-label variant="in">
+    <p-multiselect [ngStyle]="{'display': 'flex'}" id="categories" formControlName="categories" [options]="categories"
+                   optionLabel="name"></p-multiselect>
+    <label for="categories">Categories</label>
+  </p-float-label>
+  <p-float-label variant="in">
+    <p-date-picker
+      id="startDate"
+      formControlName="startDate"
+      fluid="true"/>
+    <label for="startDate">Start date</label>
+  </p-float-label>
+  <div style="display: flex; gap: 1rem">
+    <p-checkbox formControlName="womenOnly" [binary]="true" inputId="womenOnly"/>
+    <label for="womenOnly">Women only</label>
+  </div>
+  <p-button severity="info" label="Create" type="submit" size="large" fluid="true"/>
+</form>

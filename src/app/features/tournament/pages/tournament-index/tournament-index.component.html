@@ -3,6 +3,9 @@
 <p-table
   [value]="tournaments"
 >
+  <ng-template #caption>
+    <p-button routerLink="/tournament/create" label="Create tournament"></p-button>
+  </ng-template>
   <ng-template #header>
     <tr>
       <th>Name</th>

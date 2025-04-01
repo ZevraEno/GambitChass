@@ -1,9 +1,10 @@
-import {inject, Injectable} from '@angular/core';
-import {RegisterFormModel} from '../models/register-form.model';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {AuthResponse, LoginFormModel} from '../models/login-form.model';
-import {Observable} from 'rxjs';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { RegisterFormModel } from '../models/register-form.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { LoginFormModel } from '../models/login-form.model';
+import { Observable, tap } from 'rxjs';
+import { UserTokenDto } from '../models/user-token-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +12,33 @@ import {Observable} from 'rxjs';
 export class AuthService {
   private readonly _http: HttpClient = inject(HttpClient);
 
+  currentUser: WritableSignal<UserTokenDto | undefined>;
+
   constructor() {
+    const jsonUser = localStorage.getItem('currentUser');
+    this.currentUser = signal(jsonUser ? JSON.parse(jsonUser) : undefined);
   }
 
-  login(form: LoginFormModel) {
-    return this._http.post<UserTokenDto>(`${environment.API_URL}/login`,form).pipe(
-      tap(result => {
-        this.currentUser.set(result);
-        localStorage.setItem("currentUser", JSON.stringify(result));
-      }),
-    );
-  }
-
-  register(form: RegisterFormModel) {
+  register(form: RegisterFormModel): Observable<RegisterFormModel> {
     return this._http.post<RegisterFormModel>(`${environment.API_URL}/auth/register`, form);
   }
 
-  logout() {
-    localStorage.removeItem("currentUser");
+  login(form: LoginFormModel) {
+    return this._http.post<UserTokenDto>(`${environment.API_URL}/auth/login`, form).pipe(
+      tap(result => {
+        this.currentUser.set(result);
+        localStorage.setItem('currentUser', JSON.stringify(result));
+      })
+    );
+  }
+
+  logout(): void {
+    localStorage.removeItem('currentUser');
     this.currentUser.set(undefined);
+  }
+
+  getToken(): string | null {
+    const user = this.currentUser();
+    return user ? user.accessToken : null;
   }
 }
