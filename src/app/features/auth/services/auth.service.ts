@@ -14,19 +14,21 @@ export class AuthService {
   constructor() {
   }
 
-  login(form: LoginFormModel): Observable<AuthResponse> {
-    return this._http.post<AuthResponse>(`${environment.API_URL}/login`, form);
+  login(form: LoginFormModel) {
+    return this._http.post<UserTokenDto>(`${environment.API_URL}/login`,form).pipe(
+      tap(result => {
+        this.currentUser.set(result);
+        localStorage.setItem("currentUser", JSON.stringify(result));
+      }),
+    );
   }
 
   register(form: RegisterFormModel) {
     return this._http.post<RegisterFormModel>(`${environment.API_URL}/auth/register`, form);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('jwt');
-  }
-
-  logout(): void {
-    localStorage.removeItem('jwt');
+  logout() {
+    localStorage.removeItem("currentUser");
+    this.currentUser.set(undefined);
   }
 }
