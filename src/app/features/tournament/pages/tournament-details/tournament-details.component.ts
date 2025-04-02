@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {TournamentService} from '../../services/tournament.service';
 import {TournamentDetailsDtoModel} from '../../models/tournament-details-dto.model';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Button} from 'primeng/button';
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from 'primeng/tabs';
 import {NgForOf, NgIf} from '@angular/common';
@@ -22,9 +22,11 @@ import {MemberDetailsDtoModel} from '../../../auth/models/member-details-dto.mod
     TabPanels,
     TabPanel,
     TableModule,
-    NgForOf
+    NgForOf,
+    RouterLink
   ],
   templateUrl: './tournament-details.component.html',
+  standalone: true,
   styleUrl: './tournament-details.component.scss'
 })
 export class TournamentDetailsComponent implements OnInit {
@@ -38,7 +40,7 @@ export class TournamentDetailsComponent implements OnInit {
   tournament!: TournamentDetailsDtoModel;
   standings!: TournamentLeaderboardDtoModel[] | null;
   matches!: TournamentMatchDtoModel[] | null;
-  players!: MemberDetailsDtoModel[];
+  players!: MemberDetailsDtoModel[] | null;
 
   constructor() {}
 
@@ -74,9 +76,9 @@ export class TournamentDetailsComponent implements OnInit {
     let id: number = this._ar.snapshot.params['id'];
     this._tournamentService.getTournamentById(id).subscribe(tournament => {
       this.tournament = tournament;
-      this.tournament.matches.length === 0 ? this.matches = null : this.matches = this.tournament.matches;
+      this.matches = this.tournament.matches.length !== 0 ? this.tournament.matches : null;
       this.tournament.tournamentDTO.status !== "WAITING" ? this.getStandings(id) : this.standings = null;
-      this.players = tournament.tournamentDTO.members;
+      this.players = tournament.tournamentDTO.members.length !== 0 ? tournament.tournamentDTO.members : null;
     });
   }
 
@@ -88,11 +90,11 @@ export class TournamentDetailsComponent implements OnInit {
   unregisterTournament(tournamentId: number) {
   }
 
-  deletePlayer() {
-    this._tournamentService.deletePlayerTournament(this.tournament.tournamentDTO.id).subscribe({
+  deletePlayer(memberId: number) {
+    this._tournamentService.deletePlayerTournament(this.tournament.tournamentDTO.id, memberId).subscribe({
       next: () => this.getTournament(),
       error: err => console.error(err),
-    })
+    });
   }
 
   getStandings(tournamentId: number) {
@@ -103,5 +105,9 @@ export class TournamentDetailsComponent implements OnInit {
 
   isAdmin() {
     return this._authService.currentUser()?.user.role === 'ADMIN';
+  }
+
+  isConnected() {
+    return this._authService.currentUser()
   }
 }

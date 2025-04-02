@@ -50,31 +50,41 @@
           <p class="text-gray-700">
             <strong>Current round:</strong> {{ tournament?.tournamentDTO?.currentRound }}
           </p>
-          <div class="member" *ngIf="tournament?.tournamentDTO?.status === 'WAITING'">
-            <p-button (click)="registerTournament(tournament.tournamentDTO.id)"
-                      label="Register for tournament"></p-button>
-            <p-button (click)="unregisterTournament(tournament.tournamentDTO.id)" label="Unregister for tournament"
-                      severity="danger"></p-button>
-          </div>
+          @if (isConnected()) {
+            <div class="member" *ngIf="tournament?.tournamentDTO?.status === 'WAITING'">
+              <p-button (click)="registerTournament(tournament.tournamentDTO.id)"
+                        label="Register for tournament"></p-button>
+              <p-button (click)="unregisterTournament(tournament.tournamentDTO.id)" label="Unregister for tournament"
+                        severity="danger"></p-button>
+            </div>
+          } @else {
+            <a routerLink="/login">Log in to take part of this tournament!</a>
+          }
+
         </div>
         <div class="details-players">
-          <p-table [value]="players">
-            <ng-template #caption>
-              <h3>Players</h3>
-            </ng-template>
-            <ng-template #body let-player>
-              <tr>
-                <td>{{ player.pseudonym }}</td>
-                <td>{{ player.elo }} elo</td>
-                <td>
-                  @if (isAdmin() && tournament?.tournamentDTO?.status === "WAITING") {
-                    <p-button (click)="deletePlayer()" label="Delete"
-                              severity="danger"></p-button>
-                  }
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
+          @if (players){
+            <p-table [value]="players">
+              <ng-template #caption>
+                <h3>Players</h3>
+              </ng-template>
+              <ng-template #body let-player>
+                <tr>
+                  <td>{{ player.pseudonym }}</td>
+                  <td>{{ player.elo }} elo</td>
+                  <td>
+                    @if (isAdmin() && tournament?.tournamentDTO?.status === "WAITING") {
+                      <p-button (click)="deletePlayer(player.id)" label="Delete"
+                                severity="danger"></p-button>
+                    }
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          } @else {
+            <h3>Players</h3>
+            <p>Nobody registered yet, be the first to subscribe!</p>
+          }
         </div>
       </div>
     </p-tabpanel>

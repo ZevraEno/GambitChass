@@ -62,8 +62,8 @@ export class TournamentService {
     return this._http.post(`${environment.API_URL}/admin/tournaments/create`, tournament);
   }
 
-  deletePlayerTournament(tournamentId: number) {
-    return this._http.delete(`${environment.API_URL}/admin/tournaments/${tournamentId}/delete`);
+  deletePlayerTournament(tournamentId: number, memberId: number) {
+    return this._http.delete(`${environment.API_URL}/admin/tournaments/${tournamentId}/members/${memberId}`);
   }
 
 }
