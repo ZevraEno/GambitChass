@@ -8,7 +8,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 const authService: AuthService = inject(AuthService);
 let currentUser: UserTokenDto | undefined = authService.currentUser();
 if(currentUser) {
-    let token = currentUser.accessToken;
+    let token = currentUser.token;
     if(token) {
       let clone = req.clone({
         headers: req.headers.append('Authorization', `Bearer ${token}`),

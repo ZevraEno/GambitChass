@@ -43,7 +43,6 @@ export class TournamentService {
     return this._http.delete<void>(`${environment.API_URL}/admin/tournaments/${tournamentId}`);
   }
 
-  //TODO: ajouter l'UserTokenDTO
   registerTournament(tournamentId: number) {
     return this._http.post<void>(`${environment.API_URL}/tournaments/${tournamentId}/member/add`, {})
   }

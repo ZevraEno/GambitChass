@@ -23,6 +23,7 @@ import {TournamentMatchDtoModel} from '../../models/tournament-match-dto.model';
     NgForOf
   ],
   templateUrl: './tournament-details.component.html',
+  standalone: true,
   styleUrl: './tournament-details.component.scss'
 })
 export class TournamentDetailsComponent implements OnInit {
@@ -78,12 +79,24 @@ export class TournamentDetailsComponent implements OnInit {
     });
   }
 
-  //TODO: ajouter l'UserTokenDTO
   registerTournament(tournamentId: number) {
+    this._tournamentService.registerTournament(tournamentId).subscribe({
+      next: () => {
+        alert('Registered successfully!')
+        this.getTournament();
+      },
+      error: (err) => console.error('Error registering:', err)
+    });
   }
 
-  //TODO: ajouter l'UserTokenDTO
   unregisterTournament(tournamentId: number) {
+    this._tournamentService.unregisterTournament(tournamentId).subscribe({
+      next: () => {
+        alert('Unregistered successfully!')
+        this.getTournament();
+      },
+      error: (err) => console.error('Error unregistering:', err)
+    });
   }
 
   getStandings(tournamentId: number) {
