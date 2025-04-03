@@ -84,7 +84,7 @@ import {Dialog} from 'primeng/dialog';
       <ng-template #headless>
         <img
           (click)="closeDialog()"
-          src="assets/images/bonsoir.gif"
+          [src]="dylan"
           alt="dylan">
       </ng-template>
     </p-dialog>
@@ -102,6 +102,17 @@ export class AppComponent {
   isConnected: Signal<boolean>;
   role: Signal<string | undefined>;
   displayModal: boolean = false;
+  dylanList: string[] = [
+    'bonsoir.gif',
+    'buenas-noches.gif',
+    'good-evening.gif',
+    'guten-abend.gif',
+    'добрый-вечер.gif',
+    '좋은-저녁입니다.gif',
+    'こんは-んは.gif',
+    '晚上好.gif'
+  ];
+  dylan: string = '';
 
   constructor() {
     this.currentUser = this._authService.currentUser;
@@ -186,10 +197,13 @@ export class AppComponent {
   }
 
   closeDialog() {
+    this.dylan = '';
     this.displayModal = false;
   }
 
   showDialog() {
+    const randomIndex = Math.floor(Math.random() * this.dylanList.length);
+    this.dylan = `assets/images/${this.dylanList[randomIndex]}`
     this.displayModal = true;
   }
 }
