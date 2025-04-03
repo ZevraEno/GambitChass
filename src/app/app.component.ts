@@ -61,7 +61,7 @@ import {Dialog} from 'primeng/dialog';
     }
 
     main {
-      flex: 4;
+      flex: 3;
       padding: 1rem;
     }
   `,
