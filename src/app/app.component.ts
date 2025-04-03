@@ -1,8 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, computed, effect, inject, Signal, WritableSignal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {PanelMenu} from 'primeng/panelmenu';
 import {CardModule} from 'primeng/card';
-import {RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
+import {UserTokenDto} from './features/auth/models/user-token-dto';
+import {AuthService} from './features/auth/services/auth.service';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +14,6 @@ import {RouterOutlet} from '@angular/router';
     PanelMenu,
     CardModule,
     RouterOutlet,
-
 
   ],
   styles: `
@@ -63,36 +65,90 @@ import {RouterOutlet} from '@angular/router';
   `
 })
 export class AppComponent {
-  items = [
-    {
-      label: 'Home',
-      icon: 'pi pi-home',
-      routerLink: '/home',
-    },
-    {
-      label: 'Tournaments',
-      icon: 'pi pi-trophy',
-      routerLink: '/tournament',
-    },
-    {
-      label: 'Profile',
-      icon: 'pi pi-user',
-      routerLink: '/profile',
-    },
-    {
-      label: 'Stats',
-      icon: 'pi pi-chart-bar',
-      routerLink: '/stats',
-    },
-    {
-      label: 'Login',
-      icon: 'pi pi-user',
-      routerLink: '/login',
-    },
-    {
-      label: 'Register',
-      icon: 'pi pi-user-plus',
-      routerLink: '/register',
-    }
-  ];
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _router: Router = inject(Router);
+  items: MenuItem[] = [];
+  currentUser: WritableSignal<UserTokenDto | undefined>;
+  isConnected: Signal<boolean>;
+  role: Signal<string | undefined>;
+
+  constructor() {
+    this.currentUser = this._authService.currentUser;
+    this.isConnected = computed(() => !!this.currentUser());
+    this.role = computed(() => this.currentUser()?.user.role);
+    effect(() => {
+      this.items = [
+        {
+          label: 'Home',
+          icon: 'pi pi-home',
+          routerLink: '/home',
+          routerLinkActiveOptions: {exact: true},
+        },
+        {
+          label: 'Tournaments',
+          icon: 'pi pi-trophy',
+          routerLink: '/tournament',
+          routerLinkActiveOptions: {exact: false},
+        }
+      ];
+      if (this.isConnected()) {
+        this.items = [
+          ...this.items,
+          {
+            label: 'Profile',
+            icon: 'pi pi-user',
+            routerLink: '/profile',
+            routerLinkActiveOptions: {exact: true},
+          },
+          {
+            label: 'Stats',
+            icon: 'pi pi-chart-bar',
+            routerLink: '/stats',
+            routerLinkActiveOptions: {exact: true},
+          },
+          {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this._authService.logout();
+              this._router.navigate(['/']).then();
+            }
+          }
+        ];
+        if (this.role() === 'USER') {
+          // TODO: Add USERS-only menu links
+          this.items = [
+            ...this.items,
+            {
+              label: 'UrUser (ToDelete)',
+            },
+          ];
+        } else if (this.role() === 'ADMIN') {
+          // TODO: Add ADMIN-only menu links
+          this.items = [
+            ...this.items,
+            {
+              label: 'UrAdmin (ToDelete)',
+            },
+          ];
+        }
+      } else {
+        this.items = [
+          ...this.items,
+          {
+            label: 'Login',
+            icon: 'pi pi-user',
+            routerLink: '/login',
+            routerLinkActiveOptions: {exact: true},
+          },
+          {
+            label: 'Register',
+            icon: 'pi pi-user-plus',
+            routerLink: '/register',
+            routerLinkActiveOptions: {exact: true},
+          }
+        ];
+      }
+    });
+  }
 }
