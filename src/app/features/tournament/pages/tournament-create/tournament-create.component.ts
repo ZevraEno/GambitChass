@@ -11,6 +11,7 @@ import {Checkbox} from 'primeng/checkbox';
 import {Button} from 'primeng/button';
 import {TournamentService} from '../../services/tournament.service';
 import {TournamentCreateFormModel} from '../../models/tournament-create-form.model';
+import {Card} from 'primeng/card';
 
 @Component({
   selector: 'app-tournament-create',
@@ -23,7 +24,8 @@ import {TournamentCreateFormModel} from '../../models/tournament-create-form.mod
     NgStyle,
     DatePicker,
     Checkbox,
-    Button
+    Button,
+    Card
   ],
   templateUrl: './tournament-create.component.html',
   styleUrl: './tournament-create.component.scss'
@@ -35,12 +37,20 @@ export class TournamentCreateComponent {
   private readonly _router: Router = inject(Router);
 
   tournamentForm: FormGroup;
-  categories: any[];
+  categories = [
+    { name: 'Junior', code: 'JUNIOR' },
+    { name: 'Senior', code: 'SENIOR' },
+    { name: 'Veteran', code: 'VETERAN' },
+    { name: 'Openbar', code: 'OPENBAR' },
+  ];
+  minDate: Date = new Date();
+  failure?: string;
 
   constructor() {
+    this.minDate.setDate(this.minDate.getDate() + 7);
     this.tournamentForm = this._fb.group({
-      name: [null, [Validators.required, Validators.maxLength(100)]],
-      place: [null, [Validators.required, Validators.maxLength(100)]],
+      name: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
+      place: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
       minPlayer: [null, [Validators.required, Validators.min(2)]],
       maxPlayer: [null, [Validators.required]],
       minElo: [null, [Validators.required, Validators.min(0), Validators.max(3000)]],
@@ -49,13 +59,6 @@ export class TournamentCreateComponent {
       startDate: [null, [Validators.required]],
       womenOnly: [false, [Validators.required]],
     });
-    this.categories = [
-      { name: 'Junior', code: 'JUNIOR' },
-      { name: 'Senior', code: 'SENIOR' },
-      { name: 'Veteran', code: 'VETERAN' },
-      { name: 'Openbar', code: 'OPENBAR' },
-    ];
-    this.tournamentForm.patchValue({categories: this.categories});
   }
 
   onSubmit() {
@@ -64,21 +67,27 @@ export class TournamentCreateComponent {
     if (this.tournamentForm.invalid) {
       return;
     }
-    let codes: any[] = []
-    this.categories.forEach((c) => {
-      codes.push(c.code);
-    })
 
-    const testForm= this.tournamentForm.value;
+    const formValue = this.tournamentForm.value;
+
     const form: TournamentCreateFormModel = {
-      ...testForm,
-      categories: codes,
-      startDate: testForm.startDate.toISOString(),
-    }
+      ...formValue,
+      categories: formValue.categories?.map((c: any) => c.code) || [],
+      startDate: formValue.startDate ? formValue.startDate.toISOString() : null,
+    };
     console.log(form);
 
     this._tournamentService.createTournament(form).subscribe({
-      next: () => this._router.navigate(['/tournament']).then()
+      next: () => this._router.navigate(['/tournament']).then(),
+      error: err => {
+        if (typeof err.error === "string") {
+          this.failure = err.error;
+        } else {
+          this.failure = Object.entries(err.error)
+            .map(([key, value]) => `The "${key}" value ${value}`)
+            .toString();
+        }
+      }
     })
 
   }

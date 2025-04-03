@@ -1,4 +1,5 @@
 export interface MemberDetailsDtoModel {
+  id: number;
   pseudonym: string;
   email: string;
   birthDate: Date;

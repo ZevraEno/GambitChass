@@ -1,6 +1,6 @@
 export interface UserTokenDto {
- token: string;
- user: UserSessionDto;
+  user: UserSessionDto;
+  token: string;
 }
 
 export interface UserSessionDto {
