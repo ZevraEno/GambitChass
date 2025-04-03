@@ -7,6 +7,7 @@ import {UserTokenDto} from './features/auth/models/user-token-dto';
 import {AuthService} from './features/auth/services/auth.service';
 import {MenuItem} from 'primeng/api';
 import {NgClass} from '@angular/common';
+import {Dialog} from 'primeng/dialog';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ import {NgClass} from '@angular/common';
     CardModule,
     RouterOutlet,
     NgClass,
-
+    Dialog,
   ],
   styles: `
     :host {
@@ -70,8 +71,24 @@ import {NgClass} from '@angular/common';
       'aside-user': role() === 'USER'
     }">
       <p-panel-menu [model]="items"/>
-      <img src="https://cdn-icons-png.flaticon.com/512/12595/12595944.png" alt="logo">
+      <img
+        (click)="showDialog()"
+        src="https://cdn-icons-png.flaticon.com/512/12595/12595944.png"
+        alt="logo">
     </aside>
+
+    <p-dialog
+      [(visible)]="displayModal"
+      [style]="{background: 'transparent !important', border: 0, boxShadow: 'none', width: '50vw'}"
+      modal="true">
+      <ng-template #headless>
+        <img
+          (click)="closeDialog()"
+          src="https://c.tenor.com/gKwBHj7Gg8cAAAAC/tenor.gif"
+          alt="dylan">
+      </ng-template>
+    </p-dialog>
+
     <main>
       <router-outlet/>
     </main>
@@ -84,6 +101,7 @@ export class AppComponent {
   currentUser: WritableSignal<UserTokenDto | undefined>;
   isConnected: Signal<boolean>;
   role: Signal<string | undefined>;
+  displayModal: boolean = false;
 
   constructor() {
     this.currentUser = this._authService.currentUser;
@@ -165,5 +183,13 @@ export class AppComponent {
         ];
       }
     });
+  }
+
+  closeDialog() {
+    this.displayModal = false;
+  }
+
+  showDialog() {
+    this.displayModal = true;
   }
 }
