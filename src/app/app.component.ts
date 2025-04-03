@@ -6,6 +6,7 @@ import {Router, RouterOutlet} from '@angular/router';
 import {UserTokenDto} from './features/auth/models/user-token-dto';
 import {AuthService} from './features/auth/services/auth.service';
 import {MenuItem} from 'primeng/api';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import {MenuItem} from 'primeng/api';
     PanelMenu,
     CardModule,
     RouterOutlet,
+    NgClass,
 
   ],
   styles: `
@@ -33,7 +35,7 @@ import {MenuItem} from 'primeng/api';
       flex: 1;
       padding: 1rem;
       text-align: center;
-      background: linear-gradient(132deg, rgb(251, 251, 255) 0.00%, rgb(215, 223, 252) 100.00%);
+      background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
 
       h1 {
         color: rgba(0, 0, 0, 0.3);
@@ -49,13 +51,24 @@ import {MenuItem} from 'primeng/api';
       }
     }
 
+    .aside-admin {
+      background-image: linear-gradient(to top, #f77062 0%, #fe5196 100%);
+    }
+
+    .aside-user {
+      background-image: linear-gradient(to top, #96fbc4 0%, #f9f586 100%);
+    }
+
     main {
       flex: 4;
       padding: 1rem;
     }
   `,
   template: `
-    <aside>
+    <aside [ngClass]="{
+      'aside-admin': role() === 'ADMIN',
+      'aside-user': role() === 'USER'
+    }">
       <p-panel-menu [model]="items"/>
       <img src="https://cdn-icons-png.flaticon.com/512/12595/12595944.png" alt="logo">
     </aside>
@@ -116,23 +129,23 @@ export class AppComponent {
           }
         ];
         if (this.role() === 'USER') {
-          this.items = [
-            ...this.items,
-            {
-              label: 'You are USER',
-              icon: 'pi pi-exclamation-circle',
-              disabled: true,
-            },
-          ];
+          // this.items = [
+          //   ...this.items,
+          //   {
+          //     label: 'You are USER',
+          //     icon: 'pi pi-exclamation-circle',
+          //     disabled: true,
+          //   },
+          // ];
         } else if (this.role() === 'ADMIN') {
-          this.items = [
-            ...this.items,
-            {
-              label: 'You are ADMIN',
-              icon: 'pi pi-exclamation-circle',
-              disabled: true,
-            },
-          ];
+          // this.items = [
+          //   ...this.items,
+          //   {
+          //     label: 'You are ADMIN',
+          //     icon: 'pi pi-exclamation-circle',
+          //     disabled: true,
+          //   },
+          // ];
         }
       } else {
         this.items = [
