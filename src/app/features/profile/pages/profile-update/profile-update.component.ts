@@ -166,7 +166,8 @@ export class ProfileUpdateComponent {
     };
     this._profileService.update(form).subscribe({
       next: _ => {
-        this._router.navigate(['/']).then();
+        this._authService.logout();
+        this._router.navigate(['/login']).then();
       },
       error: err => {
         if (typeof err.error === "string") {
