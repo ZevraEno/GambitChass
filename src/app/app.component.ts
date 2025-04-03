@@ -116,19 +116,21 @@ export class AppComponent {
           }
         ];
         if (this.role() === 'USER') {
-          // TODO: Add USERS-only menu links
           this.items = [
             ...this.items,
             {
-              label: 'UrUser (ToDelete)',
+              label: 'You are USER',
+              icon: 'pi pi-exclamation-circle',
+              disabled: true,
             },
           ];
         } else if (this.role() === 'ADMIN') {
-          // TODO: Add ADMIN-only menu links
           this.items = [
             ...this.items,
             {
-              label: 'UrAdmin (ToDelete)',
+              label: 'You are ADMIN',
+              icon: 'pi pi-exclamation-circle',
+              disabled: true,
             },
           ];
         }
