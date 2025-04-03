@@ -49,8 +49,8 @@ export class TournamentCreateComponent {
   constructor() {
     this.minDate.setDate(this.minDate.getDate() + 7);
     this.tournamentForm = this._fb.group({
-      name: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
-      place: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
+      name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      place: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       minPlayer: [null, [Validators.required, Validators.min(2)]],
       maxPlayer: [null, [Validators.required]],
       minElo: [null, [Validators.required, Validators.min(0), Validators.max(3000)]],
@@ -75,7 +75,6 @@ export class TournamentCreateComponent {
       categories: formValue.categories?.map((c: any) => c.code) || [],
       startDate: formValue.startDate ? formValue.startDate.toISOString() : null,
     };
-    console.log(form);
 
     this._tournamentService.createTournament(form).subscribe({
       next: () => this._router.navigate(['/tournament']).then(),

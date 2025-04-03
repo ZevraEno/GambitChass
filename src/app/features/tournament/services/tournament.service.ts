@@ -6,6 +6,7 @@ import {TournamentPagesDtoModel} from '../models/tournament-pages-dto.model';
 import {TournamentDetailsDtoModel} from '../models/tournament-details-dto.model';
 import {TournamentLeaderboardDtoModel} from '../models/tournament-leaderboard-dto.model';
 import {TournamentCreateFormModel} from '../models/tournament-create-form.model';
+import {MatchResultFormModel} from '../models/match-result-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +64,10 @@ export class TournamentService {
 
   deletePlayerTournament(tournamentId: number, memberId: number) {
     return this._http.delete(`${environment.API_URL}/admin/tournaments/${tournamentId}/members/${memberId}`);
+  }
+
+  updateMatchResult(match: MatchResultFormModel) {
+    return this._http.patch(`${environment.API_URL}/admin/tournaments/${match.id}/update?matchResult=${match.matchResult}`, null);
   }
 
 }
