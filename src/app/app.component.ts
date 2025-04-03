@@ -84,7 +84,7 @@ import {Dialog} from 'primeng/dialog';
       <ng-template #headless>
         <img
           (click)="closeDialog()"
-          src="https://c.tenor.com/gKwBHj7Gg8cAAAAC/tenor.gif"
+          src="assets/images/bonsoir.gif"
           alt="dylan">
       </ng-template>
     </p-dialog>
