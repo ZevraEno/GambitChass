@@ -1,7 +1,9 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, WritableSignal} from '@angular/core';
 import {ProfileService} from '../../service/profile.service';
 import {UIChart} from 'primeng/chart';
 import {ChartData} from 'chart.js';
+import {UserTokenDto} from '../../../auth/models/user-token-dto';
+import {AuthService} from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-profile-stats',
@@ -25,7 +27,9 @@ import {ChartData} from 'chart.js';
   `
 })
 export class ProfileStatsComponent {
+  private readonly _authService: AuthService = inject(AuthService);
   private readonly _profileService: ProfileService = inject(ProfileService);
+  currentUser: WritableSignal<UserTokenDto | undefined>;
   chartData: ChartData | undefined;
   chartOptions = {
     responsive: true,
@@ -38,8 +42,8 @@ export class ProfileStatsComponent {
   };
 
   constructor() {
-    // TODO: Get current user id
-    this._profileService.getStats(2).subscribe({
+    this.currentUser = this._authService.currentUser;
+    this._profileService.getStats(this.currentUser()!.user.id).subscribe({
       next: res => {
         this.chartData = {
           labels: ['Played', 'Won', 'Lost', 'Drawn'],
@@ -47,9 +51,9 @@ export class ProfileStatsComponent {
             {
               label: 'Matches',
               data: [
-                res.nbrOfMatchsPlayed + 3,
-                res.nbrOfMatchsWon + 1,
-                res.nbrOfMatchsLost + 2,
+                res.nbrOfMatchsPlayed,
+                res.nbrOfMatchsWon,
+                res.nbrOfMatchsLost,
                 res.nbrOfMatchsDrawn
               ],
               backgroundColor: [
