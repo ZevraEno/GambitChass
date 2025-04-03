@@ -4,7 +4,11 @@
       <p-button (click)="startTournament(tournament)" label="Start Tournament"></p-button>
     }
     @if (tournament?.tournamentDTO?.status === "IN_PROGRESS") {
-      <p-button (click)="nextRound(tournament)" label="Next Round" severity="info"></p-button>
+      @if (roundIsOver(tournament.tournamentDTO.currentRound)) {
+        <p-button (click)="nextRound(tournament)" label="Next Round" severity="info"></p-button>
+      } @else {
+        <p-button [disabled]="true" (click)="nextRound(tournament)" label="Next Round" severity="info"></p-button>
+      }
     }
     @if (tournament?.tournamentDTO?.status !== "IN_PROGRESS") {
       <p-button (click)="deleteTournament(tournament.tournamentDTO.id)" label="Delete Tournament"
@@ -52,10 +56,13 @@
           </p>
           @if (isConnected()) {
             <div class="member" *ngIf="tournament?.tournamentDTO?.status === 'WAITING'">
-              <p-button (click)="registerTournament(tournament.tournamentDTO.id)"
-                        label="Register for tournament"></p-button>
-              <p-button (click)="unregisterTournament(tournament.tournamentDTO.id)" label="Unregister for tournament"
-                        severity="danger"></p-button>
+              @if (isRegistered()){
+                <p-button (click)="unregisterTournament(tournament.tournamentDTO.id)" label="Unregister for tournament"
+                          severity="danger"></p-button>
+              } @else {
+                <p-button (click)="registerTournament(tournament.tournamentDTO.id)"
+                          label="Register for tournament"></p-button>
+              }
             </div>
           } @else {
             <a routerLink="/login">Log in to take part of this tournament!</a>
@@ -63,7 +70,7 @@
 
         </div>
         <div class="details-players">
-          @if (players){
+          @if (players) {
             <p-table [value]="players">
               <ng-template #caption>
                 <h3>Players</h3>
@@ -117,6 +124,28 @@
                 }
               }
               <td>{{ match.blackPlayer.pseudonym }} {{ match.blackPlayer.elo }}</td>
+              @if (isAdmin() && tournament.tournamentDTO.status === "IN_PROGRESS" && tournament.tournamentDTO.currentRound === match.roundNumber) {
+                <td>
+                  <p-button (click)="showDialog(match.id)" label="Show"/>
+                  <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible"
+                            [style]="{ width: '25rem', height: '20rem' }">
+                    <form [formGroup]="selectedResult" (ngSubmit)="setMatch()" class="flex gap-4 my-50">
+                      <p-floatlabel class="w-full md:w-56" variant="in">
+                        <p-select [ngStyle]="{'display': 'flex'}" formControlName="matchResult" inputId="matchResult"
+                                  [options]="results" optionLabel="name" styleClass="w-full" variant="filled"/>
+                        <label for="matchResult">Result</label>
+                      </p-floatlabel>
+                      <div class="flex justify-end gap-2 buttons">
+                        <p-button label="Cancel" severity="secondary" (click)="visible = false"/>
+                        <p-button label="Save" type="submit"/>
+                      </div>
+                    </form>
+
+                  </p-dialog>
+                </td>
+              } @else {
+                <td></td>
+              }
             </tr>
           </ng-template>
         </p-table>
