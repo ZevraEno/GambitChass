@@ -107,8 +107,8 @@ export class AppComponent {
     'buenas-noches.gif',
     'good-evening.gif',
     'guten-abend.gif',
-    'добрый-вечер.gif',
-    '좋은-저녁입니다.gif',
+    'добрый-вечер.gif',
+    '좋은-저녁입니다.gif',
     'こんは-んは.gif',
     '晚上好.gif'
   ];
