@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, WritableSignal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Button} from 'primeng/button';
 import {DatePicker} from 'primeng/datepicker';
@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {Card} from 'primeng/card';
 import {ProfileUpdateFormModel} from '../../models/profile-update-form.model';
 import {AuthService} from '../../../auth/services/auth.service';
+import {UserTokenDto} from '../../../auth/models/user-token-dto';
 
 @Component({
   selector: 'app-profile-update',
@@ -125,13 +126,15 @@ export class ProfileUpdateComponent {
   private readonly _profileService: ProfileService = inject(ProfileService);
   private readonly _fb: FormBuilder = inject(FormBuilder);
   private readonly _router: Router = inject(Router);
+  currentUser: WritableSignal<UserTokenDto | undefined>;
   updaterForm: FormGroup;
   genders: any[];
   failure?: string;
 
   constructor() {
+    this.currentUser = this._authService.currentUser;
     this.updaterForm = this._fb.group({
-      pseudonym: [null, Validators.required],
+      pseudonym: [this.currentUser()?.user.pseudonym, Validators.required],
       email: [null, [Validators.required, Validators.email]],
       password: [null, Validators.required],
       gender: [null, [Validators.required]],
